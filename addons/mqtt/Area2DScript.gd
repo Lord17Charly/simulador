@@ -26,8 +26,10 @@ func _on_body_exited(body):
 
 func _on_timer_timeout():
 	# Define tópico y mensaje
-	var topic = "metest/sala"
-	var message = "Player sigue dentro del area"
+	var topic = "PC/pecera1/nivelAgua/sensor/1"
+	var random_value = str(randi() % 100) # Número aleatorio entre 0 y 99, convertido a String
+	var message = random_value
+
 	# Reenvía el mensaje usando la función en Main :contentReference[oaicite:8]{index=8}
 	main_node.forward_mqtt_message(topic, message, false, 0)
 	print("🔄 Mensaje reenviado en timer:", topic, message)  # Confirmación en consola

@@ -5,20 +5,23 @@ func _ready():
 	if mqtt == null:
 		printerr("❌ Nodo MQTT no asignado o path incorrecto")
 		
+	mqtt.client_id = "godot"
 		# Conectar señales (Godot 4)
 	mqtt.broker_connected.connect(_on_broker_connected)
 	mqtt.received_message.connect(_on_received_message)
 	mqtt.broker_connection_failed.connect(_on_broker_failed)
 	mqtt.broker_disconnected.connect(_on_broker_disconnected)
 	# Iniciar conexión al brokerdocke
-	var ok = mqtt.connect_to_broker('ws://192.168.251.147:8083/mqtt')
+	var ok = mqtt.connect_to_broker('192.168.0.0')
 	if not ok:
 		print("No pude iniciar la conexión MQTT.")
 
 func _on_broker_connected():
 	print("✅ Conectado al broker MQTT")
 	mqtt.subscribe("PC/pecera1/#", 0)
-	mqtt.publish("PC/pecera1/nivelagua/sensor/1", "sensor de agua", false, 0)
+	#var random_value = str(randi() % 100)  Número aleatorio entre 0 y 99, convertido a String
+	#mqtt.publish("PC/pecera1/nivelAgua/sensor/1", random_value, false, 0)
+
 
 func _on_received_message(topic: String, payload):
 	# payload ya es String, úsalo directamente:
