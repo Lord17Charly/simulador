@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://b57kitkdkkhvo"]
+
+[ext_resource type="Texture2D" uid="uid://c4j6kyhlenqne" path="res://Assets/Sprite-0001.png" id="1_vkkb2"]
+
+[node name="pecerap" type="Node2D"]
+texture_filter = 1
+position = Vector2(54, 26)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(40, 61.5)
+scale = Vector2(2, 1.648)
+texture = ExtResource("1_vkkb2")

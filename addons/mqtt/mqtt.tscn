@@ -1,0 +1,37 @@
+[gd_scene load_steps=6 format=3 uid="uid://ktm7k0co2o7l"]
+
+[ext_resource type="Script" path="res://addons/mqtt/Main.gd" id="1_8eca6"]
+[ext_resource type="Script" path="res://addons/mqtt/mqtt.gd" id="1_unkqx"]
+[ext_resource type="Script" path="res://addons/mqtt/Area2DScript.gd" id="3_tlufb"]
+[ext_resource type="Texture2D" uid="uid://bcmx255ekkxj0" path="res://Assets/sensor_nive-de-agual.png" id="4_xaap5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6650d"]
+size = Vector2(125, 12)
+
+[node name="Main" type="Node"]
+script = ExtResource("1_8eca6")
+mqtt_path = NodePath("mqttclient")
+
+[node name="mqttclient" type="Node" parent="."]
+script = ExtResource("1_unkqx")
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(188, 377)
+script = ExtResource("3_tlufb")
+main_path = NodePath("..")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(92, 61)
+shape = SubResource("RectangleShape2D_6650d")
+
+[node name="Timer" type="Timer" parent="Area2D"]
+wait_time = 0.5
+
+[node name="Sprite2D" type="Sprite2D" parent="Area2D"]
+texture_filter = 1
+position = Vector2(145, 91.5)
+scale = Vector2(1.96875, 1.92188)
+texture = ExtResource("4_xaap5")
+
+[connection signal="body_entered" from="Area2D" to="Area2D" method="_on_body_entered"]
+[connection signal="body_exited" from="Area2D" to="Area2D" method="_on_body_exited"]
