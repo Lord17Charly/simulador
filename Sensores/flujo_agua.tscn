@@ -1,0 +1,34 @@
+[gd_scene load_steps=6 format=3 uid="uid://xc1h1ylqsmag"]
+
+[ext_resource type="Script" path="res://flujo_agua.gd" id="1_wfst6"]
+[ext_resource type="Script" path="res://addons/mqtt/mqtt.gd" id="2_0ykmk"]
+[ext_resource type="Texture2D" uid="uid://dj5pjbmiwfccu" path="res://icon.svg" id="3_5ag6p"]
+[ext_resource type="Script" path="res://Area2D.gd" id="4_6s1qu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_710wb"]
+size = Vector2(232, 63)
+
+[node name="flujo_agua" type="Node2D"]
+script = ExtResource("1_wfst6")
+mqtt_path = NodePath("MQTTClient")
+
+[node name="MQTTClient" type="Node" parent="."]
+script = ExtResource("2_0ykmk")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(95, 111)
+texture = ExtResource("3_5ag6p")
+
+[node name="Area2D" type="Area2D" parent="."]
+script = ExtResource("4_6s1qu")
+main_path = NodePath("..")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(273, 118)
+shape = SubResource("RectangleShape2D_710wb")
+
+[node name="flujo_agua_Timer" type="Timer" parent="Area2D"]
+wait_time = 15.0
+
+[connection signal="body_entered" from="Area2D" to="Area2D" method="_on_body_entered"]
+[connection signal="body_exited" from="Area2D" to="Area2D" method="_on_body_exited"]

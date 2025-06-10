@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://dvsk77xy6fu6s"]
+
+[ext_resource type="Script" path="res://agua.gd" id="1_8ij4m"]
+[ext_resource type="Texture2D" uid="uid://dj5pjbmiwfccu" path="res://icon.svg" id="1_61ft7"]
+[ext_resource type="PackedScene" uid="uid://bk1feyugw6sup" path="res://llave.tscn" id="3_ket2x"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gloyr"]
+size = Vector2(117, 116)
+
+[node name="AGUA" type="Node2D"]
+script = ExtResource("1_8ij4m")
+llave_path = NodePath("llave")
+altura_objetivo = null
+duracion_anim = null
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-10, -27)
+shape = SubResource("RectangleShape2D_gloyr")
+
+[node name="Sprite2D" type="Sprite2D" parent="CollisionShape2D"]
+modulate = Color(0, 0, 0.6, 0.960784)
+position = Vector2(-3, 1)
+texture = ExtResource("1_61ft7")
+
+[node name="llave" parent="." instance=ExtResource("3_ket2x")]

@@ -1,0 +1,76 @@
+[gd_scene load_steps=13 format=3 uid="uid://8hiax0j5o57i"]
+
+[ext_resource type="Script" path="res://pecera_grande.gd" id="1_f6q78"]
+[ext_resource type="Script" path="res://Sensores/Llave-Plantilla.gd" id="2_jf38c"]
+[ext_resource type="Texture2D" uid="uid://bs1es5tw6ei3c" path="res://Assets/peceras/pecera_grande.png" id="3_qkkw1"]
+[ext_resource type="Texture2D" uid="uid://hkyjiab8ahy2" path="res://Assets/activadores/Sprite-0001.png" id="3_ubptb"]
+[ext_resource type="Texture2D" uid="uid://b1g8jko2d6nn8" path="res://Assets/activadores/Sprite-0002.png" id="4_ywqjj"]
+[ext_resource type="Texture2D" uid="uid://dkb833xdfpvgn" path="res://Assets/activadores/Sprite-0003.png" id="5_qd3b1"]
+[ext_resource type="Script" path="res://addons/mqtt/Sensor-Plantilla.gd" id="6_pf8ej"]
+[ext_resource type="Texture2D" uid="uid://bcmx255ekkxj0" path="res://Assets/sensor_nive-de-agual.png" id="7_4ru3m"]
+[ext_resource type="Script" path="res://addons/mqtt/mqtt.gd" id="8_no4if"]
+[ext_resource type="PackedScene" uid="uid://6nciklsjo0j" path="res://peces/pez1.tscn" id="10_fn8i8"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rxdyn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_ubptb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_ywqjj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_qd3b1")
+}],
+"loop": true,
+"name": &"Abrir-Llave",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wjsxc"]
+size = Vector2(125, 12)
+
+[node name="pecera_grande" type="Node2D"]
+script = ExtResource("1_f6q78")
+
+[node name="MQTTClient" type="Node" parent="."]
+script = ExtResource("8_no4if")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(358, 149)
+texture = ExtResource("3_qkkw1")
+
+[node name="Llave-Plantilla" type="Node2D" parent="."]
+script = ExtResource("2_jf38c")
+pecera_id = 3
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Llave-Plantilla"]
+texture_filter = 1
+position = Vector2(202, 149)
+sprite_frames = SubResource("SpriteFrames_rxdyn")
+animation = &"Abrir-Llave"
+
+[node name="Temperatura2" type="Area2D" parent="."]
+position = Vector2(398, 66)
+script = ExtResource("6_pf8ej")
+pecera_id = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Temperatura2"]
+position = Vector2(78, 90)
+shape = SubResource("RectangleShape2D_wjsxc")
+
+[node name="Timer" type="Timer" parent="Temperatura2"]
+wait_time = 0.5
+
+[node name="Sprite2D" type="Sprite2D" parent="Temperatura2"]
+texture_filter = 1
+position = Vector2(134, 118)
+scale = Vector2(1.96875, 1.92188)
+texture = ExtResource("7_4ru3m")
+
+[node name="pez1" parent="." instance=ExtResource("10_fn8i8")]
+position = Vector2(31, 48)
+
+[connection signal="body_entered" from="Temperatura2" to="Temperatura2" method="_on_body_entered" flags=18]
+[connection signal="body_exited" from="Temperatura2" to="Temperatura2" method="_on_body_exited" flags=18]

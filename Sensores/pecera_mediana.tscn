@@ -1,0 +1,123 @@
+[gd_scene load_steps=13 format=3 uid="uid://bkdhtup58oxna"]
+
+[ext_resource type="Texture2D" uid="uid://b3jg8jnvbikw0" path="res://Assets/peceras/pecera_pequeña.png" id="1_d6qoc"]
+[ext_resource type="Script" path="res://Sensores/pecera_mediana.gd" id="1_m81ja"]
+[ext_resource type="Script" path="res://addons/mqtt/Sensor-Plantilla.gd" id="2_kcjhw"]
+[ext_resource type="Texture2D" uid="uid://bcmx255ekkxj0" path="res://Assets/sensor_nive-de-agual.png" id="3_h6gqc"]
+[ext_resource type="Script" path="res://addons/mqtt/mqtt.gd" id="4_xmc16"]
+[ext_resource type="PackedScene" uid="uid://6nciklsjo0j" path="res://peces/pez1.tscn" id="5_1kxc6"]
+[ext_resource type="Script" path="res://Sensores/Llave-Plantilla.gd" id="6_7jdne"]
+[ext_resource type="Texture2D" uid="uid://hkyjiab8ahy2" path="res://Assets/activadores/Sprite-0001.png" id="7_mw33s"]
+[ext_resource type="Texture2D" uid="uid://b1g8jko2d6nn8" path="res://Assets/activadores/Sprite-0002.png" id="8_uswxt"]
+[ext_resource type="Texture2D" uid="uid://dkb833xdfpvgn" path="res://Assets/activadores/Sprite-0003.png" id="9_jqwjr"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_td0b4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_mw33s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_uswxt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_jqwjr")
+}],
+"loop": true,
+"name": &"Abrir-Llave",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_25cix"]
+size = Vector2(125, 12)
+
+[node name="pecera_mediana" type="Node2D"]
+position = Vector2(61, -13)
+script = ExtResource("1_m81ja")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(187, 128)
+scale = Vector2(7.73438, 4.53125)
+texture = ExtResource("1_d6qoc")
+
+[node name="pez1" parent="." instance=ExtResource("5_1kxc6")]
+position = Vector2(31, 48)
+
+[node name="Llave-Plantilla" type="Node2D" parent="."]
+script = ExtResource("6_7jdne")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Llave-Plantilla"]
+texture_filter = 1
+position = Vector2(72, 133)
+sprite_frames = SubResource("SpriteFrames_td0b4")
+animation = &"Abrir-Llave"
+frame = 1
+frame_progress = 0.865801
+
+[node name="MQTTClient" type="Node" parent="."]
+script = ExtResource("4_xmc16")
+
+[node name="Llave-Plantilla2" type="Node2D" parent="."]
+script = ExtResource("6_7jdne")
+actuador_id = 2
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Llave-Plantilla2"]
+texture_filter = 1
+position = Vector2(91, 212)
+sprite_frames = SubResource("SpriteFrames_td0b4")
+animation = &"Abrir-Llave"
+frame = 1
+frame_progress = 0.865801
+
+[node name="Llave-Plantilla3" type="Node2D" parent="."]
+script = ExtResource("6_7jdne")
+actuador_id = 3
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Llave-Plantilla3"]
+texture_filter = 1
+position = Vector2(348, 173)
+sprite_frames = SubResource("SpriteFrames_td0b4")
+animation = &"Abrir-Llave"
+frame = 1
+frame_progress = 0.865801
+
+[node name="Temperatura2" type="Area2D" parent="."]
+position = Vector2(280, 143)
+script = ExtResource("2_kcjhw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Temperatura2"]
+position = Vector2(78, 90)
+shape = SubResource("RectangleShape2D_25cix")
+
+[node name="Timer" type="Timer" parent="Temperatura2"]
+wait_time = 0.5
+
+[node name="Sprite2D" type="Sprite2D" parent="Temperatura2"]
+texture_filter = 1
+position = Vector2(134, 118)
+scale = Vector2(1.96875, 1.92188)
+texture = ExtResource("3_h6gqc")
+
+[node name="Temperatura3" type="Area2D" parent="."]
+position = Vector2(290, -52)
+script = ExtResource("2_kcjhw")
+sensor_id = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Temperatura3"]
+position = Vector2(78, 90)
+shape = SubResource("RectangleShape2D_25cix")
+
+[node name="Timer" type="Timer" parent="Temperatura3"]
+wait_time = 0.5
+
+[node name="Sprite2D" type="Sprite2D" parent="Temperatura3"]
+texture_filter = 1
+position = Vector2(134, 118)
+scale = Vector2(1.96875, 1.92188)
+texture = ExtResource("3_h6gqc")
+
+[connection signal="body_entered" from="Temperatura2" to="Temperatura2" method="_on_body_entered" flags=18]
+[connection signal="body_exited" from="Temperatura2" to="Temperatura2" method="_on_body_exited" flags=18]
+[connection signal="body_entered" from="Temperatura3" to="Temperatura3" method="_on_body_entered" flags=18]
+[connection signal="body_exited" from="Temperatura3" to="Temperatura3" method="_on_body_exited" flags=18]

@@ -1,0 +1,63 @@
+[gd_scene load_steps=4 format=3 uid="uid://cgeyirn86oakt"]
+
+[ext_resource type="Script" path="res://Menu/Menu.gd" id="1_cn4jj"]
+[ext_resource type="Texture2D" uid="uid://bs1es5tw6ei3c" path="res://Assets/peceras/pecera_grande.png" id="1_inx02"]
+[ext_resource type="FontFile" uid="uid://did0fe6cfso0k" path="res://Assets/fonts/kenney_kenney-fonts/Fonts/Kenney Pixel.ttf" id="2_3k4us"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_cn4jj")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 919.0
+offset_bottom = 385.0
+
+[node name="TextureRect" type="TextureRect" parent="Panel"]
+texture_filter = 1
+layout_mode = 0
+offset_right = 919.0
+offset_bottom = 384.0
+texture = ExtResource("1_inx02")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 205.0
+offset_top = 23.0
+offset_right = 723.0
+offset_bottom = 93.0
+theme_override_fonts/font = ExtResource("2_3k4us")
+theme_override_font_sizes/font_size = 77
+text = "EMULADOR DE PECERAS"
+
+[node name="PECERA-GRANDE" type="Button" parent="."]
+layout_mode = 0
+offset_left = 150.0
+offset_top = 194.0
+offset_right = 287.0
+offset_bottom = 225.0
+text = "PECERA GRANDE"
+
+[node name="PECERA-CHICA" type="Button" parent="."]
+layout_mode = 0
+offset_left = 582.0
+offset_top = 191.0
+offset_right = 701.0
+offset_bottom = 224.0
+text = "PECERA CHICA"
+
+[node name="PECERA-MEDIANA" type="Button" parent="."]
+layout_mode = 0
+offset_left = 357.0
+offset_top = 196.0
+offset_right = 502.0
+offset_bottom = 227.0
+text = "PECERA MEDIANA"
+
+[connection signal="pressed" from="PECERA-GRANDE" to="." method="_on_peceragrande_pressed"]
+[connection signal="pressed" from="PECERA-MEDIANA" to="." method="_on_peceragrande_pressed"]

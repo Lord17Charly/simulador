@@ -1,0 +1,80 @@
+[gd_scene load_steps=6 format=3 uid="uid://cntdgku6uiyjv"]
+
+[ext_resource type="Script" path="res://addons/mqtt/mqtt.gd" id="2_046ox"]
+[ext_resource type="Script" path="res://addons/mqtt/Sensor-Plantilla.gd" id="3_j2ti1"]
+[ext_resource type="Texture2D" uid="uid://bcmx255ekkxj0" path="res://Assets/sensor_nive-de-agual.png" id="4_1mm0g"]
+
+[sub_resource type="GDScript" id="GDScript_fl7wt"]
+script/source = "extends Node
+@export var id:int=2
+@export var mqtt_path: NodePath
+@onready var mqtt = get_node_or_null(mqtt_path)
+func _ready():
+	if mqtt == null:
+		printerr(\"❌ Nodo MQTT no asignado o path incorrecto\")
+		
+	mqtt.client_id = \"godot\"
+		# Conectar señales (Godot 4)
+	mqtt.broker_connected.connect(_on_broker_connected)
+	mqtt.received_message.connect(_on_received_message)
+	mqtt.broker_connection_failed.connect(_on_broker_failed)
+	mqtt.broker_disconnected.connect(_on_broker_disconnected)
+	# Iniciar conexión al brokerdocke
+	var ok = mqtt.connect_to_broker('192.168.0.22')
+	if not ok:
+		print(\" Termometro No pude iniciar la conexión MQTT.\")
+
+func _on_broker_connected():
+	print(\"✅ Conectado al broker MQTT\")
+	mqtt.subscribe(\"PC/pecera/2/temperatura/sensor/1\", 0)
+
+func _on_received_message(topic: String, payload):
+	# payload ya es String, úsalo directamente:
+	print(\"📥 Mensaje en [%s]: %s\" % [topic, payload])
+
+func _on_broker_failed():
+	print(\"❌ Conexión fallida de Termometro al broker\")
+
+func _on_broker_disconnected():
+	print(\"⚠️ Desconectado Termometro del broker\")
+func forward_mqtt_message(topic: String, payload: String, retain: bool=false, qos: int=0) -> void:
+	if mqtt == null:
+		push_error(\"❌ Cliente MQTT no inicializado\")
+		return
+		# Verifica la conexión al broker (BCM_CONNECTED == 20)
+	if mqtt.brokerconnectmode == mqtt.BCM_CONNECTED:
+		mqtt.publish(topic, payload, retain, qos)
+		print(\"🔄 Mensaje reenviado vía MQTT:\", topic, payload)
+	else:
+		push_error(\"❌ No conectado al broker. Imposible reenviar mensaje.\")
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6650d"]
+size = Vector2(125, 12)
+
+[node name="Termometro" type="Node2D"]
+script = SubResource("GDScript_fl7wt")
+mqtt_path = NodePath("mqttclient")
+
+[node name="mqttclient" type="Node" parent="."]
+script = ExtResource("2_046ox")
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(188, 377)
+script = ExtResource("3_j2ti1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(92, 61)
+shape = SubResource("RectangleShape2D_6650d")
+
+[node name="Timer" type="Timer" parent="Area2D"]
+wait_time = 0.5
+
+[node name="Sprite2D" type="Sprite2D" parent="Area2D"]
+texture_filter = 1
+position = Vector2(145, 91.5)
+scale = Vector2(1.96875, 1.92188)
+texture = ExtResource("4_1mm0g")
+
+[connection signal="body_entered" from="Area2D" to="Area2D" method="_on_body_entered" flags=18]
+[connection signal="body_exited" from="Area2D" to="Area2D" method="_on_body_exited" flags=18]

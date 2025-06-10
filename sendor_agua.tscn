@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://c0fs6p2ivbj2k"]
+
+[ext_resource type="Script" path="res://Sensor_Agua.gd" id="1_r51iw"]
+[ext_resource type="Script" path="res://addons/mqtt/mqtt.gd" id="2_elb7l"]
+[ext_resource type="Texture2D" uid="uid://dj5pjbmiwfccu" path="res://icon.svg" id="3_fsfph"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s4qq3"]
+size = Vector2(30, 7)
+
+[node name="Sensor_Agua" type="Node2D"]
+script = ExtResource("1_r51iw")
+mqtt_path = NodePath("MQTTClient")
+broker_url = "192.168.0.22"
+
+[node name="MQTTClient" type="Node" parent="."]
+script = ExtResource("2_elb7l")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(29, 0)
+shape = SubResource("RectangleShape2D_s4qq3")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-1, -1)
+scale = Vector2(0.234375, 0.234375)
+texture = ExtResource("3_fsfph")
